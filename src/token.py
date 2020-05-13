@@ -1,29 +1,34 @@
 #!/usr/bin/python
 from abc import abstractmethod
-from .token_type import TokenType
+from token_type import TokenType
 
 class Token:
     """docstring for Token."""
 
-    @abstractmethod
+    # @abstractmethod
     def get_type(self):
-        raise NotImplementedError
+        print('executed.....')
+        pass
+        # raise NotImplementedError
 
-    @abstractmethod
+    # @abstractmethod
     def get_text(self):
-        raise NotImplementedError
+        pass
+        # raise NotImplementedError
 
 
 class SimpleToken(Token):
     """docstring for SimpleToken."""
-    def __init__(self):
-        super(Token, self).__init__()
-        self.type = None
-        self.text = ''
+    def __init__(self, type=None, text=''):
+        # super(Token, self).__init__()
+        self.type = type
+        self.text = text
 
         def get_type(self):
+            print('executedaaaaaaaa')
             return self.type
 
         def get_text(self):
+            print('executedaaaaaaaa')
             self.text
         

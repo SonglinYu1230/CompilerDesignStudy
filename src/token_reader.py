@@ -31,8 +31,9 @@ class SimpleTokenReader(TokenReader):
     
     def read(self):
         if self.pos < len(self.tokens):
+            token = self.tokens[self.pos]
             self.pos += 1
-            return self.tokens[self.pos]
+            return token
         return None
 
 
@@ -55,4 +56,12 @@ class SimpleTokenReader(TokenReader):
         if 0 <= position < len(self.tokens):
             self.pos = position
 
-    
+    def dump(self):
+        print('text\ttype')
+        # print(self.tokens, len(self.tokens), 'aaa')
+        token = self.read()
+        print(token, type(token), 'aaaaa')
+        while token:
+            # print('{}\t\t{}'.format(token.get_text(), token.get_type()))
+            print('{}\t\t{} aaaaaa'.format(token.text, token.type))
+            token = self.read()

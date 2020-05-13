@@ -1,7 +1,7 @@
-from .token import Token, SimpleToken
-from .token_reader import SimpleTokenReader
-from .dfa_state import DfaState
-from .token_type import TokenType
+from token import Token, SimpleToken
+from token_reader import SimpleTokenReader
+from dfa_state import DfaState
+from token_type import TokenType
 
 
 class SimpleLexer:
@@ -25,8 +25,12 @@ class SimpleLexer:
     # 开始解析的时候，进入初始状态；某个Token解析完毕，也进入初始状态，在这里把Token记下来，然后建立一个新的Token。
     def init_token(self, ch):
         if self.token_text:
+            print(self.token.type, self.token.text, '*******')
             self.token.text = self.token_text
-            self.tokens.append(self.token)
+            # self.tokens.append(self.token)
+
+            token = SimpleToken(self.token.type, self.token.text)
+            self.tokens.append(token)
 
             self.token_text = ''
             self.token = SimpleToken()
@@ -86,10 +90,87 @@ class SimpleLexer:
     # 解析字符串，形成Token。
     # 这是一个有限状态自动机，在不同的状态中迁移。
     def tokenize(self, code):
+        print('code is ' + code)
+
         self.tokens = []
         self.token_text = ''
         self.token = SimpleToken()
 
+        state = DfaState.Initial
+        for idx, val in enumerate(code):
+            # print(idx, val, state, '------')
+            if state == DfaState.Initial:
+                state = self.init_token(val)
+                continue
+            
+            if state == DfaState.Id:
+                if self.is_alpha(val) or self.is_digit(val):
+                    self.token_text += val
+                else:
+                    state = self.init_token(val)
+                continue
+
+            if state == DfaState.GT:
+                if val == '=':
+                    self.token.type = TokenType.GE
+                    state = DfaState.GE
+                    self.token_text += val
+                else:
+                    state = self.init_token(val)
+                continue
+            
+            if state == DfaState.GE or state == DfaState.Assignment \
+                or state == DfaState.Plus or state == DfaState.Minus \
+                    or state == DfaState.Star or state == DfaState.Slash \
+                        or state == DfaState.SemiColon or state == DfaState.LeftParen \
+                            or state == DfaState.LeftParen:
+                            state = self.init_token(val)
+                            continue
+            
+            if state == DfaState.IntLiteral:
+                if self.is_digit(val):
+                    self.token_text += val
+                else:
+                    state = self.init_token(val)
+                continue
+                
+            if state == DfaState.Id_int1:
+                if val == 'n':
+                    state = DfaState.Id_int2
+                    self.token_text += val
+                elif self.is_digit(val) or self.is_alpha(val):
+                    state = DfaState.Id
+                    self.token_text += val
+                else:
+                    state = self.init_token(val)
+                continue
+            
+            if state == DfaState.Id_int2:
+                if val == 't':
+                    state = DfaState.Id_int3
+                    self.token_text += val
+                elif self.is_digit(val) or self.is_alpha(val):
+                    state = DfaState.Id
+                    self.token_text += val
+                else:
+                    state = self.init_token(val)
+                continue 
+            
+            if state == DfaState.Id_int3:
+                if self.is_blank(val):
+                    self.token.type = TokenType.Int
+                    state = self.init_token(val)
+                else:
+                    state = DfaState.Id
+                    self.token_text += val
+                continue
+        # 把最后一个token送进去
+        # 没看懂为啥
+        if self.token_text:
+            self.init_token(code[-1])
+        
+        # print(self.tokens, '*******')
+        return SimpleTokenReader(self.tokens)
     
 
     @staticmethod
