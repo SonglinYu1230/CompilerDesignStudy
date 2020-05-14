@@ -65,3 +65,6 @@ class SimpleTokenReader(TokenReader):
             # print('{}\t\t{}'.format(token.get_text(), token.get_type()))
             print('{}\t\t{} '.format(token.text, token.type))
             token = self.read()
+
+        # reset pos after read
+        self.pos = 0

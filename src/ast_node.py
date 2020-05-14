@@ -39,6 +39,6 @@ class SimpleASTNode(ASTNode):
 
     
     def dump_ast(self, indent):
-        print('{}{} {}'.format(indent, self.node_type, self.get_text))
+        print('{}{} {}'.format(indent, self.node_type, self.text))
         for child in self.children:
             child.dump_ast(indent + '\t')

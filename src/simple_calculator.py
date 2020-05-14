@@ -39,12 +39,14 @@ class SimpleCalculator:
     # int a;
     # int b = 2*3;
     def int_declare(self, token_reader):
+        print('int_declare', len(token_reader.tokens),'aaa')
         node = None
         token = token_reader.peek()
         if token and token.type == TokenType.Int:
             token = token_reader.read()
             if token_reader.peek().type == TokenType.Identifier:
                 token = token_reader.read()
+                print(token, 'zzzz')
                 # 创建当前节点，并把变量名记到AST节点的文本值中，这里新建一个变量子节点也是可以的
                 node = SimpleASTNode(ASTNodeType.IntDeclaration, token.text)
                 token = token_reader.peek()
@@ -60,6 +62,7 @@ class SimpleCalculator:
             
             if node:
                 token = token_reader.peek()
+                print(token, 'tttttt')
                 if token and token.type == TokenType.SemiColon:
                     token_reader.read()
                 else:
@@ -74,7 +77,7 @@ class SimpleCalculator:
 
         token = token_reader.peek()
         if child1 and token:
-            if token.type == TokenType.Plus and token.type == TokenType.Minus:
+            if token.type == TokenType.Plus or token.type == TokenType.Minus:
                 token = token_reader.read()
                 child2 = self.additive(token_reader)
                 if child2:

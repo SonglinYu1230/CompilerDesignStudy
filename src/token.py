@@ -31,4 +31,5 @@ class SimpleToken(Token):
         # def get_text(self):
         #     print('executedaaaaaaaa')
         #     self.text
-        
+    def __str__(self):
+        return "<SimpleToken> type={} text={}".format(self.type, self.text)
