@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # 一个Token流。由Lexer生成。Parser可以从中获取Token。
-class TokenReader():
+class TokenReader:
     # 返回Token流中下一个Token，并从流中取出。 如果流已经为空，返回null;
     def read(self):
         pass
@@ -37,7 +37,7 @@ class SimpleTokenReader(TokenReader):
         return None
 
 
-    def peek():
+    def peek(self):
         if self.pos < len(self.tokens):
             return self.tokens[self.pos]
         return None
