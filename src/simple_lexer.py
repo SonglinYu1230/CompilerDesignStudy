@@ -25,12 +25,12 @@ class SimpleLexer:
     # 开始解析的时候，进入初始状态；某个Token解析完毕，也进入初始状态，在这里把Token记下来，然后建立一个新的Token。
     def init_token(self, ch):
         if self.token_text:
-            print(self.token.type, self.token.text, '*******')
+            # print(self.token.type, self.token.text, '*******')
             self.token.text = self.token_text
-            # self.tokens.append(self.token)
+            self.tokens.append(self.token)
 
-            token = SimpleToken(self.token.type, self.token.text)
-            self.tokens.append(token)
+            # token = SimpleToken(self.token.type, self.token.text)
+            # self.tokens.append(token)
 
             self.token_text = ''
             self.token = SimpleToken()
@@ -41,6 +41,8 @@ class SimpleLexer:
                 new_state = DfaState.Id_int1
             else:
                 new_state = DfaState.Id
+            self.token.type = TokenType.Identifier
+            self.token_text += ch
         elif self.is_digit(ch):
             new_state = DfaState.IntLiteral
             self.token.type = TokenType.IntLiteral
@@ -178,6 +180,6 @@ class SimpleLexer:
         print('text\ttype')
         token = token_reader.read()
         while token:
-            print(token.get_text() + '\t\t' + token.get_type())
+            print(token.text + '\t\t' + token.type)
             token = token_reader.read()
 

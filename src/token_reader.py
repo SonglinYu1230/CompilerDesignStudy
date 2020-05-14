@@ -63,5 +63,5 @@ class SimpleTokenReader(TokenReader):
         print(token, type(token), 'aaaaa')
         while token:
             # print('{}\t\t{}'.format(token.get_text(), token.get_type()))
-            print('{}\t\t{} aaaaaa'.format(token.text, token.type))
+            print('{}\t\t{} '.format(token.text, token.type))
             token = self.read()

@@ -24,11 +24,11 @@ class SimpleToken(Token):
         self.type = type
         self.text = text
 
-        def get_type(self):
-            print('executedaaaaaaaa')
-            return self.type
+        # def get_type(self):
+        #     print('executedaaaaaaaa')
+        #     return self.type
 
-        def get_text(self):
-            print('executedaaaaaaaa')
-            self.text
+        # def get_text(self):
+        #     print('executedaaaaaaaa')
+        #     self.text
         
