@@ -60,6 +60,16 @@ def calculator_test():
     print("计算: " + script + "，看上去一切正常。")
     calculator.evaluate(script)
 
+    # 测试语法错误
+    # script = "2+"
+    # print("\n: " + script + "，应该有语法错误。")
+    # calculator.evaluate(script)
+
+    script = "2+3+4"
+    print("\n计算: " + script + "，结合性出现错误。")
+    calculator.evaluate(script)
+
+
 
 if __name__ == '__main__':
     # lexter_test()

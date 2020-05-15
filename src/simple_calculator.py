@@ -23,7 +23,38 @@ class SimpleCalculator:
 
     # 对某个AST节点求值，并打印求值过程。
     def __evaluate(self, node, indent):
-        pass
+        result, node_type = 0, node.node_type
+        print('{}Calculating: {}'.format(indent, node_type))
+
+        if node_type == ASTNodeType.Programm:
+            for child in node.children:
+                result = self.__evaluate(child, indent + '\t')
+        elif node_type == ASTNodeType.Additive:
+            child1 = node.children[0]
+            value1 = self.__evaluate(child1, indent + '\t')
+            child2 = node.children[1]
+            value2 = self.__evaluate(child2, indent + '\t')
+            
+            if node.text == '+':
+                result = value1 + value2
+            else:
+                result = value1 - value2
+        elif node_type == ASTNodeType.Multiplicative:
+            child1 = node.children[0]
+            value1 = self.__evaluate(child1, indent + '\t')
+            child2 = node.children[1]
+            value2 = self.__evaluate(child2, indent + '\t')
+            
+            if node.text == '*':
+                result = value1 * value2
+            else:
+                result = value1 / value2
+        elif node_type == ASTNodeType.IntLiteral:
+            result = int(node.text)
+        
+        print(indent + 'Result: ' + str(result))
+        return result        
+
 
 
     # 语法解析：根节点
@@ -76,6 +107,7 @@ class SimpleCalculator:
         node = child1
 
         token = token_reader.peek()
+        
         if child1 and token:
             if token.type == TokenType.Plus or token.type == TokenType.Minus:
                 token = token_reader.read()
