@@ -1,3 +1,7 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+
 from simple_lexer import SimpleLexer
 from simple_calculator import SimpleCalculator
 
@@ -8,25 +12,21 @@ def lexter_test():
     token_reader = SimpleLexer().tokenize(script)
     token_reader.dump()
 
-    print('*' * 30)
     script = "inta age = 45;"
     print("parse :" + script)
     token_reader = SimpleLexer().tokenize(script)
     token_reader.dump()
 
-    print('*' * 30)
     script = "in age = 45;"
     print("parse :" + script)
     token_reader = SimpleLexer().tokenize(script)
     token_reader.dump()
 
-    print('*' * 30)
     script = "age >= 45;"
     print("parse :" + script)
     token_reader = SimpleLexer().tokenize(script)
     token_reader.dump()
 
-    print('*' * 30)
     script = "age > 45;"
     print("parse :" + script)
     token_reader = SimpleLexer().tokenize(script)
@@ -72,6 +72,6 @@ def calculator_test():
 
 
 if __name__ == '__main__':
-    # lexter_test()
-    calculator_test()
+    lexter_test()
+    # calculator_test()
     

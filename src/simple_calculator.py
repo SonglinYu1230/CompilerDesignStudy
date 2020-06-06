@@ -1,4 +1,6 @@
-#/usr/bin/python
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from ast_node import SimpleASTNode
 from token_type import TokenType
 from ast_node_type import ASTNodeType

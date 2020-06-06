@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from token import Token, SimpleToken
 from token_reader import SimpleTokenReader
 from dfa_state import DfaState
@@ -92,7 +95,7 @@ class SimpleLexer:
     # 解析字符串，形成Token。
     # 这是一个有限状态自动机，在不同的状态中迁移。
     def tokenize(self, code):
-        print('code is ' + code)
+        # print('code is ' + code)
 
         self.tokens = []
         self.token_text = ''

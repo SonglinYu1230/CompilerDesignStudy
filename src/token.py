@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from abc import abstractmethod
 from token_type import TokenType
 

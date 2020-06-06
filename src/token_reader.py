@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # 一个Token流。由Lexer生成。Parser可以从中获取Token。
 class TokenReader:
@@ -60,11 +61,11 @@ class SimpleTokenReader(TokenReader):
         print('text\ttype')
         # print(self.tokens, len(self.tokens), 'aaa')
         token = self.read()
-        print(token, type(token), 'aaaaa')
+        # print(token, type(token), 'aaaaa')
         while token:
             # print('{}\t\t{}'.format(token.get_text(), token.get_type()))
             print('{}\t\t{} '.format(token.text, token.type))
             token = self.read()
-
+        print('*' * 50 + '\n')
         # reset pos after read
         self.pos = 0
