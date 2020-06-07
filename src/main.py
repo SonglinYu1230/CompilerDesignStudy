@@ -42,7 +42,7 @@ def dump(code, token_reader):
 def calculator_test():
     calculator = SimpleCalculator()
 
-    script = "int a = b+3;"
+    script = "int a = b + 3;"
     print("解析变量声明语句: " + script)
     lexer = SimpleLexer()
     token_reader = lexer.tokenize(script)
@@ -53,8 +53,6 @@ def calculator_test():
         node.dump_ast("")
     except Exception as e:
         print('something wrong: ', e)
-
-    print('*****************************************************\n\n')
 
     script = "2+3*5";
     print("计算: " + script + "，看上去一切正常。")
@@ -70,8 +68,7 @@ def calculator_test():
     calculator.evaluate(script)
 
 
-
 if __name__ == '__main__':
-    lexter_test()
-    # calculator_test()
+    # lexter_test()
+    calculator_test()
     

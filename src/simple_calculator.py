@@ -1,15 +1,26 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from functools import wraps
+
 from ast_node import SimpleASTNode
 from token_type import TokenType
 from ast_node_type import ASTNodeType
 from simple_lexer import SimpleLexer
 
 
+def func_name_decorator(f):
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        print('current funciton is ', f.__name__)
+        return f(*args, **kwds)
+    return wrapper
+
+
 class SimpleCalculator:
 
     def evaluate(self, script):
+        print('*' * 30 + '\t' + script + '\t' + '*' * 30 + '\n')
         tree = self.parse(script)
         tree.dump_ast("")
         self.__evaluate(tree, "")
@@ -71,15 +82,15 @@ class SimpleCalculator:
     # 整型变量声明语句，如：
     # int a;
     # int b = 2*3;
+    @func_name_decorator
     def int_declare(self, token_reader):
-        print('int_declare', len(token_reader.tokens),'aaa')
         node = None
         token = token_reader.peek()
         if token and token.type == TokenType.Int:
             token = token_reader.read()
             if token_reader.peek().type == TokenType.Identifier:
                 token = token_reader.read()
-                print(token, 'zzzz')
+                # print(token, 'zzzz')
                 # 创建当前节点，并把变量名记到AST节点的文本值中，这里新建一个变量子节点也是可以的
                 node = SimpleASTNode(ASTNodeType.IntDeclaration, token.text)
                 token = token_reader.peek()
@@ -95,7 +106,7 @@ class SimpleCalculator:
             
             if node:
                 token = token_reader.peek()
-                print(token, 'tttttt')
+                # print(token, 'tttttt')
                 if token and token.type == TokenType.SemiColon:
                     token_reader.read()
                 else:
@@ -104,26 +115,54 @@ class SimpleCalculator:
 
 
     # 语法解析：加法表达式
+    @func_name_decorator
     def additive(self, token_reader):
+        return self.additive_while(token_reader)
+
         child1 = self.multiplicative(token_reader)
-        node = child1
+
+        node = child1 # node 为啥要等于 child1 
 
         token = token_reader.peek()
+        
         
         if child1 and token:
             if token.type == TokenType.Plus or token.type == TokenType.Minus:
                 token = token_reader.read()
                 child2 = self.additive(token_reader)
-                if child2:
+                try:
+                    if child2:
+                        node = SimpleASTNode(ASTNodeType.Additive, token.text)
+                        node.add_child(child1)
+                        node.add_child(child2)
+                    else:
+                        raise Exception('invalid additive expression, expecting the right part.')
+                except Exception as e:
+                    print(e)
+                
+        return node
+
+    @func_name_decorator
+    def additive_while(self, token_reader):
+        child1 = self.multiplicative(token_reader) # 应用 add 规则
+        node = child1
+        if child1:
+            while True: # 循环应用 add'
+                token = token_reader.peek() 
+                if token and (token.type == TokenType.Plus or token.token_type == TokenType.Minus):
+                    token = token_reader.read() # 读出 + 号
+                    child2 = self.multiplicative(token_reader) # 计算下级节点
                     node = SimpleASTNode(ASTNodeType.Additive, token.text)
                     node.add_child(child1)
                     node.add_child(child2)
+                    child1 = node
                 else:
-                    raise Exception('invalid additive expression, expecting the right part.')
+                    break
         return node
 
 
     # 语法解析：乘法表达式
+    @func_name_decorator
     def multiplicative(self, token_reader):
         child1 = self.primary(token_reader)
         node = child1
@@ -143,6 +182,7 @@ class SimpleCalculator:
 
 
     # 语法解析：基础表达式
+    @func_name_decorator
     def primary(self, token_reader):
         node = None
         token = token_reader.peek()
