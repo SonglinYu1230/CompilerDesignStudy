@@ -35,7 +35,7 @@ class SimpleScript:
         # print "This is the name of the script: ", sys.argv[0]
         # print "Number of arguments: ", len(sys.argv)
         # print "The arguments are: " , str(sys.argv)
-        if len(sys.argv) and sys.argv[1] == '-v':
+        if len(sys.argv) > 1 and sys.argv[1] == '-v':
             self.verbose = True
             print('verbose mode')
         
@@ -119,7 +119,19 @@ class SimpleScript:
         elif node_type == ASTNodeType.IntDeclaration:
             var_name = node.text
             var_value = None
-
+            if node.children:
+                child = node.children[0]
+                result = self.evaluate(child, indent + "\t")
+                var_value = int(result)
+            self.variables[var_name] = var_value
+        
+        if self.verbose:
+            print(indent + "Result: " + result)
+        elif indent == "":
+            if node.node_type == ASTNodeType.IntDeclaration or node.node_type == ASTNodeType.AssignmentStmt:
+                print(node.text + ': ', result)
+            elif node.node_type != ASTNodeType.Programm:
+                print(result)
         
         return result
         

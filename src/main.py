@@ -4,7 +4,7 @@
 
 from simple_lexer import SimpleLexer
 from simple_calculator import SimpleCalculator
-
+from simple_script import SimpleScript
 
 def lexter_test():
     script = "int age = 45;"
@@ -68,7 +68,13 @@ def calculator_test():
     calculator.evaluate(script)
 
 
+def repl_test():
+    script = SimpleScript()
+    script.start()
+
+
 if __name__ == '__main__':
     # lexter_test()
-    calculator_test()
+    # calculator_test()
+    repl_test()
     
