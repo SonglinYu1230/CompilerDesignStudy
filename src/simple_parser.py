@@ -38,7 +38,7 @@ class SimpleParser:
                 child = self.expression_statement(token_reader)
             
             if not child:
-                child = self.assignment_statement()
+                child = self.assignment_statement(token_reader)
             
             if child:
                 node.add_child(child)
@@ -51,13 +51,14 @@ class SimpleParser:
     def int_declare(self, token_reader):
         node = None
         token = token_reader.peek()
-        if token and token.node_type == TokenType.Int:
+        print(token, type(token))
+        if token and token.type == TokenType.Int:
             token = token_reader.read()
-            if token_reader.peek().node_type == TokenType.Identifier:
+            if token_reader.peek().type == TokenType.Identifier:
                 token = token_reader.read()
                 node = SimpleASTNode(ASTNodeType.IntDeclaration, token.text)
                 token = token_reader.peek()
-                if token and token.node_type == TokenType.Assignment:
+                if token and token.type == TokenType.Assignment:
                     token_reader.read()
                     child = self.additive(token_reader)
                     if not child:
@@ -69,7 +70,7 @@ class SimpleParser:
             
             if node:
                 token = token_reader.peek()
-                if token and token.node_type == TokenType.SemiColon:
+                if token and token.type == TokenType.SemiColon:
                     token_reader.read()
                 else:
                     raise Exception('invalid statement, expecting semicolon')
@@ -92,11 +93,11 @@ class SimpleParser:
     def assignment_statement(self, token_reader):
         node = None
         token = token_reader.peek()
-        if token and token.node_type == TokenType.Identifier:
+        if token and token.type == TokenType.Identifier:
             token = token_reader.read()
             node = SimpleASTNode(ASTNodeType.AssignmentStmt, token.text)
             token = token_reader.peek()
-            if token and token.node_type == TokenType.Assignment:
+            if token and token.type == TokenType.Assignment:
                 token_reader.read()
                 child = self.additive(token_reader)
                 if not child:
@@ -104,7 +105,7 @@ class SimpleParser:
                 else:
                     node.add_child(child)
                     token = token_reader.peek()
-                    if token and token.node_type == TokenType.SemiColon:
+                    if token and token.type == TokenType.SemiColon:
                         token_reader.read()
                     else:
                         raise Exception("invalid statement, expecting semicolon")
@@ -121,7 +122,7 @@ class SimpleParser:
         if child1:
             while True:
                 token = token_reader.peek()
-                if token and (token.node_type == TokenType.Plus or token.node_type == TokenType.Minus):
+                if token and (token.type == TokenType.Plus or token.type == TokenType.Minus):
                     token = token_reader.read()
                     child2 = self.multiplicative(token_reader)
                     if child2:
@@ -141,11 +142,11 @@ class SimpleParser:
 
         while True:
             token = token_reader.peek()
-            if token and (token.node_type == TokenType.Star or token.node_type == TokenType.Slash):
+            if token and (token.type == TokenType.Star or token.type == TokenType.Slash):
                 token = token_reader.read()
                 child2 = self.primary(token_reader)
                 if child2:
-                    node = SimpleASTNode(ASTNodeType.Multiplicative, token_reader.text)
+                    node = SimpleASTNode(ASTNodeType.Multiplicative, token.text)
                     node.add_child(child1)
                     node.add_child(child2)
                     child1 = node
@@ -160,18 +161,18 @@ class SimpleParser:
         node = None
         token = token_reader.peek()
         if token:
-            if token.node_type == TokenType.IntLiteral:
+            if token.type == TokenType.IntLiteral:
                 token = token_reader.read()
-                node = SimpleASTNode(ASTNodeType.IntLiteral, token_reader.text)
-            elif token.node_type == TokenType.Identifier:
+                node = SimpleASTNode(ASTNodeType.IntLiteral, token.text)
+            elif token.type == TokenType.Identifier:
                 token = token_reader.read()
                 node = SimpleASTNode(ASTNodeType.Identifier, token.text)
-            elif token.node_type == TokenType.LeftParen:
+            elif token.type == TokenType.LeftParen:
                 token_reader.read
                 node = self.additive(token_reader)
                 if node:
                     token = token_reader.peek()
-                    if token and token.node_type == TokenType.RightParen:
+                    if token and token.type == TokenType.RightParen:
                         token_reader.read()
                     else:
                         raise Exception('expecting right parentesis')

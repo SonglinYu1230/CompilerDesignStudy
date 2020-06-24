@@ -45,7 +45,7 @@ class SimpleScript:
         script = SimpleScript()
 
         script_text = ''
-        print('\n>') # 提示符
+        # print('\n>') # 提示符
 
         while True:
             try:
@@ -60,6 +60,7 @@ class SimpleScript:
                     if (self.verbose):
                         tree.dump_ast('')
                     script.evaluate(tree, '')
+                    script_text = ''
             except Exception as e:
                 print(e)
                 script_text = ''
