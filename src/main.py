@@ -54,7 +54,7 @@ def calculator_test():
     except Exception as e:
         print('something wrong: ', e)
 
-    script = "2+3*5";
+    script = "2+3*5"
     print("计算: " + script + "，看上去一切正常。")
     calculator.evaluate(script)
 

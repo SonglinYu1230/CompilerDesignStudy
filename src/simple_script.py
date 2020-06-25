@@ -79,8 +79,10 @@ class SimpleScript:
             print(indent + 'Calculating: ' + node_type)
         
         if node_type == ASTNodeType.Programm:
+            # print(node, len(node.children), 'ssss')
             for child in node.children:
                 result = self.evaluate(child, indent)
+                # print(result, 'aaaa')
         elif node_type == ASTNodeType.Additive:
             child1 = node.children[0]
             value1 = self.evaluate(child1, indent + '\t')
@@ -117,6 +119,12 @@ class SimpleScript:
             var_name = node.text
             if var_name not in self.variables:
                 raise Exception('unknown variable: ' + var_name)
+            var_value = None
+            if node.children:
+                child = node.children[0]
+                result = self.evaluate(child, indent + "\t")
+                var_value = int(result)
+            self.variables[var_name] = var_value
         elif node_type == ASTNodeType.IntDeclaration:
             var_name = node.text
             var_value = None

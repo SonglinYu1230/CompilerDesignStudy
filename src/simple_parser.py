@@ -51,7 +51,7 @@ class SimpleParser:
     def int_declare(self, token_reader):
         node = None
         token = token_reader.peek()
-        print(token, type(token))
+        # print(token, type(token))
         if token and token.type == TokenType.Int:
             token = token_reader.read()
             if token_reader.peek().type == TokenType.Identifier:
@@ -129,6 +129,7 @@ class SimpleParser:
                         node = SimpleASTNode(ASTNodeType.Additive, token.text)
                         node.add_child(child1)
                         node.add_child(child2)
+                        child1 = node
                     else:
                         raise Exception('invalid additive expression, expecting the right part.')
                 else:
